@@ -1,3 +1,5 @@
+import Twitter.Message;
+import Twitter.Properties;
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
@@ -54,7 +56,7 @@ public class Streaming implements Runnable{
         hosebirdEndpoint.trackTerms(terms);
 
 
-        TwitterProperties p = new TwitterProperties();
+        Properties p = new Properties();
 
         Authentication hosebirdAuth = new OAuth1(p.consumerKey, p.consumerSecret, p.authKey, p.authSecret);
 
@@ -77,7 +79,7 @@ public class Streaming implements Runnable{
             String msg = null;
             try {
                 msg = msgQueue.take();
-                TwitterMessage message = conversion.twitterify(msg);
+                Message message = conversion.twitterify(msg);
                 if(null!=message){
 //                    messages.put(message);
 
@@ -92,7 +94,7 @@ public class Streaming implements Runnable{
         }
     }
 
-    public byte[] digest(TwitterMessage message){
+    public byte[] digest(Message message){
         byte[] digest = new byte[0];
         try {
             md.update(message.text.getBytes("UTF-8")); // Change this to "UTF-16" if needed

@@ -1,9 +1,11 @@
+package Twitter;
+
 import java.util.ArrayList;
 
 /**
  * Created by mahmoud on 1/30/15.
  */
-public class TwitterBoundingBox {
+public class BoundingBox {
     public String type;
     public ArrayList<ArrayList<ArrayList<Double>>> coordinates;
 }

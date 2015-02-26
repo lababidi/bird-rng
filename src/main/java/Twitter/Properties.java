@@ -1,19 +1,18 @@
-import java.io.FileNotFoundException;
+package Twitter;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.Properties;
 
 /**
  * Created by mahmoud on 2/26/15.
  */
-public class TwitterProperties {
+public class Properties {
 
     public String consumerKey, consumerSecret, authKey, authSecret;
 
-    public TwitterProperties()  {
+    public Properties()  {
 
-        Properties prop = new Properties();
+        java.util.Properties prop = new java.util.Properties();
         String propFileName = "config";
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
@@ -33,7 +32,7 @@ public class TwitterProperties {
     }
 
     public static void main(String[] args){
-            TwitterProperties properties = new TwitterProperties();
+            Properties properties = new Properties();
             System.out.println(properties.consumerKey);
     }
 }

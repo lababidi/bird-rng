@@ -1,3 +1,4 @@
+import Twitter.Message;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,14 +33,14 @@ public class Conversion {
         mapper.setDateFormat(new SimpleDateFormat(dateFormat));
 
     }
-    public TwitterMessage twitterify(String jsonString){
-        TwitterMessage message = new TwitterMessage();
+    public Message twitterify(String jsonString){
+        Message message = new Message();
 
         //Sometimes the json message from Twitter is a Rate-Limiting warning
         if(jsonString.length()<10 || jsonString.startsWith("{\"limit\":"))return null;
 
         try {
-            message =  mapper.readValue(jsonString, TwitterMessage.class);
+            message =  mapper.readValue(jsonString, Message.class);
             return message;
         } catch (IOException e) {
             System.err.println("json: " + jsonString);

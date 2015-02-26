@@ -1,8 +1,10 @@
+package Twitter;
+
 /**
  * Created by mahmoud on 1/30/15.
  */
-public class TwitterPlace {
-    public TwitterBoundingBox boundingBox;
+public class Place {
+    public BoundingBox boundingBox;
     public String fullName, url, country, placeType, countryCode, id, name;
-    public TwitterPlaceAttributes attributes;
+    public PlaceAttributes attributes;
 }

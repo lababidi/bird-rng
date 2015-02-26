@@ -1,33 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterBoundingBox.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterBoundingBox.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterCoordinates.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterEntities.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterEntities.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterGeo.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterHashtag.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterHashtag.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMedia.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMedia.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMediaSize.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMediaSize.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMediaSizes.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMediaSizes.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterMessage.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterPlace.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterPlace.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterPlaceAttributes.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterPlaceAttributes.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterSymbol.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterSymbol.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterTrend.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterTrend.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterUrl.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterUrl.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterUser.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterUserMentions.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/TwitterUserMentions.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/BoundingBox.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Coordinates.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Entities.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Geo.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Hashtag.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Media.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/MediaSize.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/MediaSizes.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Message.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Place.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/PlaceAttributes.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Symbol.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Trend.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/Url.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/User.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Twitter/UserMentions.java" charset="UTF-8" />
   </component>
 </project>

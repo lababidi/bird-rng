@@ -1,3 +1,5 @@
+package Twitter;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -7,7 +9,7 @@ import java.util.Date;
  */
 
 
-public class TwitterUser {
+public class User {
     public boolean profileUseBackgroundImage;
     public boolean defaultProfileImage;
     public String profileImageUrlHttps;
