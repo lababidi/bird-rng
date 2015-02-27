@@ -34,7 +34,7 @@ public class Streaming implements Runnable{
     BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>(1000);
     BlockingQueue<Byte> randomBytes;
 
-    public Streaming(BlockingQueue<Byte> randomBytes) {
+    public Streaming(BlockingQueue<Byte> randomBytes, Properties p) {
         /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
         msgQueue = new LinkedBlockingQueue<>(100000);
         eventQueue = new LinkedBlockingQueue<>(1000);
@@ -55,9 +55,6 @@ public class Streaming implements Runnable{
         hosebirdEndpoint.followings(followings);
         hosebirdEndpoint.trackTerms(terms);
 
-
-        Properties p = new Properties();
-
         Authentication hosebirdAuth = new OAuth1(p.consumerKey, p.consumerSecret, p.authKey, p.authSecret);
 
         ClientBuilder builder = new ClientBuilder()
@@ -75,7 +72,7 @@ public class Streaming implements Runnable{
 
         Conversion conversion = new Conversion();
 
-        while (!hosebirdClient.isDone()) {
+        while (!hosebirdClient.isDone() && !Thread.currentThread().isInterrupted()) {
             String msg = null;
             try {
                 msg = msgQueue.take();
@@ -92,6 +89,8 @@ public class Streaming implements Runnable{
                 e.printStackTrace();
             }
         }
+        hosebirdClient.stop();
+
     }
 
     public byte[] digest(Message message){

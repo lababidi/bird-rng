@@ -1,4 +1,9 @@
+import Twitter.Properties;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,18 +22,15 @@ public class RandomGenerator {
 
     public RandomGenerator() {
 
-        streaming = new Streaming(randomBytes);
-        streamingThread = new Thread(new Streaming(randomBytes));
+        streamingThread = new Thread(new Streaming(randomBytes, new Properties("config.lababidi")));
         statistics = new HashMap<>();
 
     }
 
-    public void build(){
+    public void statistics(){
 
-        int total = 0;
+        int total = 0, count = 0;
 
-        streamingThread.start();
-        int count = 0;
         while(streamingThread.isAlive()) {
             try {
 
@@ -53,9 +55,51 @@ public class RandomGenerator {
         }
     }
 
+    public void start(){streamingThread.start();}
+    public void interrupt(){streamingThread.interrupt();}
+
+
+    public void save(int max){
+
+        ArrayList<Byte> bytes = new ArrayList<>();
+
+        int count = 0;
+        while(streamingThread.isAlive() && count<max) {
+            try {
+                bytes.add(randomBytes.take());
+                count++;
+                System.out.println(bytes.size());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        write(bytes);
+    }
+
+    public byte[] convert(ArrayList<Byte> bytesB){
+        byte[] bytes = new byte[bytesB.size()];
+        int n = 0;
+        for(byte b: bytesB){
+            bytes[n] = b;
+            n++;
+        }
+        return bytes;
+    }
+
+    public void write(ArrayList<Byte> bytes){
+        try {
+            FileOutputStream out = new FileOutputStream("test6.data");
+            out.write(convert(bytes));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args){
         RandomGenerator generator = new RandomGenerator();
-        generator.build();
-
+        generator.start();
+        generator.save(1000000);
+        generator.interrupt();
     }
 }

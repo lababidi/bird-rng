@@ -4,18 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ *
  * Created by mahmoud on 2/26/15.
  */
 public class Properties {
 
     public String consumerKey, consumerSecret, authKey, authSecret;
 
-    public Properties()  {
+    public Properties(String configName)  {
 
         java.util.Properties prop = new java.util.Properties();
-        String propFileName = "config";
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configName);
 
         if (inputStream != null) {
             try {
@@ -32,7 +32,7 @@ public class Properties {
     }
 
     public static void main(String[] args){
-            Properties properties = new Properties();
+            Properties properties = new Properties("config.lababidi");
             System.out.println(properties.consumerKey);
     }
 }
