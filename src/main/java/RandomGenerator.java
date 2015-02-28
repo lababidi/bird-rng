@@ -1,10 +1,13 @@
+import Twitter.Message;
 import Twitter.Properties;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -19,10 +22,12 @@ public class RandomGenerator {
     BlockingQueue<Byte> randomBytes = new LinkedBlockingQueue<>(10000);
     HashMap<Integer, Integer> statistics;
     Thread streamingThread;
+    BlockingQueue<Message> messages;
 
     public RandomGenerator() {
 
-        streamingThread = new Thread(new Streaming(randomBytes, new Properties("config.lababidi")));
+        messages = new LinkedBlockingQueue<>(100000);
+        streamingThread = new Thread(new Streaming(messages, new Properties("config.lababidi")));
         statistics = new HashMap<>();
 
     }
@@ -63,10 +68,14 @@ public class RandomGenerator {
 
         ArrayList<Byte> bytes = new ArrayList<>();
 
+        Message message;
         int count = 0;
         while(streamingThread.isAlive() && count<max) {
             try {
-                bytes.add(randomBytes.take());
+                message = messages.take();
+                    for (byte b : digest(message))
+//                        randomBytes.put(b);
+                bytes.add(b);
                 count++;
                 System.out.println(bytes.size());
             } catch (InterruptedException e) {
@@ -94,6 +103,19 @@ public class RandomGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public byte[] digest(Message message){
+        byte[] digest = new byte[0];
+        try {
+            md.update(message.text.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+            digest = md.digest();
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return digest;
     }
 
     public static void main(String[] args){

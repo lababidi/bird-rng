@@ -6,6 +6,7 @@ import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
 import com.twitter.hbc.core.Hosts;
 import com.twitter.hbc.core.HttpHosts;
+import com.twitter.hbc.core.endpoint.Location;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.event.Event;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
@@ -15,6 +16,7 @@ import com.twitter.hbc.httpclient.auth.OAuth1;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,16 +34,17 @@ public class Streaming implements Runnable{
 
     BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(100000);
     BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>(1000);
-    BlockingQueue<Byte> randomBytes;
+//    BlockingQueue<Byte> randomBytes;
+    BlockingQueue<Message> messages;
 
-    public Streaming(BlockingQueue<Byte> randomBytes, Properties p) {
+    public Streaming(BlockingQueue<Message> messages, Properties p) {
         /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
-        msgQueue = new LinkedBlockingQueue<>(100000);
+        msgQueue = new LinkedBlockingQueue<>(1000000);
         eventQueue = new LinkedBlockingQueue<>(1000);
-        this.randomBytes = randomBytes;
+        this.messages = messages;
 
         try {
-            md = MessageDigest.getInstance("SHA-256");
+            md = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -50,10 +53,18 @@ public class Streaming implements Runnable{
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
-        List<Long> followings = Lists.newArrayList(1234L, 566788L);
-        List<String> terms = Lists.newArrayList("twitter", "api");
-        hosebirdEndpoint.followings(followings);
-        hosebirdEndpoint.trackTerms(terms);
+//        List<Long> followings = Lists.newArrayList(1234L, 566788L);
+//        List<String> terms = Lists.newArrayList("twitter", "api");
+//        hosebirdEndpoint.followings(followings);
+//        hosebirdEndpoint.trackTerms(terms);
+        ArrayList<Location> locations = new ArrayList<>();
+        locations.add(new Location(
+                new Location.Coordinate(-75.4595947265625, 39.791654835253425),
+                new Location.Coordinate(-72.9986572265625, 41.31082388091818)));
+        locations.add(new Location(
+                new Location.Coordinate(122.1240234375, 29.53522956294847),
+                new Location.Coordinate(152.8857421875, 55.37911044801047)));
+        hosebirdEndpoint.locations(locations);
 
         Authentication hosebirdAuth = new OAuth1(p.consumerKey, p.consumerSecret, p.authKey, p.authSecret);
 
@@ -78,10 +89,11 @@ public class Streaming implements Runnable{
                 msg = msgQueue.take();
                 Message message = conversion.twitterify(msg);
                 if(null!=message){
-//                    messages.put(message);
+                    messages.put(message);
 
-                    for (byte b : digest(message))
-                        randomBytes.put(b);
+                    System.out.println(message.user.location);
+//                    for (byte b : digest(message))
+//                        randomBytes.put(b);
                 }
 
             } catch (InterruptedException e) {
@@ -93,17 +105,6 @@ public class Streaming implements Runnable{
 
     }
 
-    public byte[] digest(Message message){
-        byte[] digest = new byte[0];
-        try {
-            md.update(message.text.getBytes("UTF-8")); // Change this to "UTF-16" if needed
-            digest = md.digest();
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return digest;
-    }
 
 
 
