@@ -5,10 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -18,17 +22,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class RandomGenerator {
 
     MessageDigest md;
-    Streaming streaming;
+    Queue<Message> messages;
     BlockingQueue<Byte> randomBytes = new LinkedBlockingQueue<>(10000);
     HashMap<Integer, Integer> statistics;
     Thread streamingThread;
-    BlockingQueue<Message> messages;
+//    BlockingQueue<Message> messages;
 
     public RandomGenerator() {
 
-        messages = new LinkedBlockingQueue<>(100000);
-        streamingThread = new Thread(new Streaming(messages, new Properties("config.lababidi")));
-        statistics = new HashMap<>();
+        try {
+            messages = new ConcurrentLinkedDeque<>();
+            streamingThread = new Thread(new Streaming(messages, new Properties("config.lababidi")));
+            statistics = new HashMap<>();
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -70,16 +79,13 @@ public class RandomGenerator {
 
         Message message;
         int count = 0;
-        while(streamingThread.isAlive() && count<max) {
-            try {
-                message = messages.take();
+        while(!streamingThread.isInterrupted() && count<max) {
+            if(messages.size()>0) {
+                message = messages.poll();
                     for (byte b : digest(message))
-//                        randomBytes.put(b);
-                bytes.add(b);
+                        bytes.add(b);
                 count++;
                 System.out.println(bytes.size());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
         write(bytes);

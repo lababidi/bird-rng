@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -35,9 +36,9 @@ public class Streaming implements Runnable{
     BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(100000);
     BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>(1000);
 //    BlockingQueue<Byte> randomBytes;
-    BlockingQueue<Message> messages;
+    Queue<Message> messages;
 
-    public Streaming(BlockingQueue<Message> messages, Properties p) {
+    public Streaming(Queue<Message> messages, Properties p) {
         /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
         msgQueue = new LinkedBlockingQueue<>(1000000);
         eventQueue = new LinkedBlockingQueue<>(1000);
@@ -86,14 +87,16 @@ public class Streaming implements Runnable{
         while (!hosebirdClient.isDone() && !Thread.currentThread().isInterrupted()) {
             String msg = null;
             try {
-                msg = msgQueue.take();
-                Message message = conversion.twitterify(msg);
-                if(null!=message){
-                    messages.put(message);
+                if(msgQueue.size()>0) {
+                    msg = msgQueue.take();
+                    Message message = conversion.twitterify(msg);
+                    if (null != message) {
+                        messages.add(message);
 
-                    System.out.println(message.user.location);
+                        System.out.println(message.user.location);
 //                    for (byte b : digest(message))
 //                        randomBytes.put(b);
+                    }
                 }
 
             } catch (InterruptedException e) {
