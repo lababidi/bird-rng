@@ -1,6 +1,5 @@
 import Twitter.Message;
 import Twitter.Properties;
-import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
@@ -13,11 +12,9 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -85,7 +82,7 @@ public class Streaming implements Runnable{
         Conversion conversion = new Conversion();
 
         while (!hosebirdClient.isDone() && !Thread.currentThread().isInterrupted()) {
-            String msg = null;
+            String msg;
             try {
                 if(msgQueue.size()>0) {
                     msg = msgQueue.take();
@@ -100,7 +97,7 @@ public class Streaming implements Runnable{
                 }
 
             } catch (InterruptedException e) {
-                System.out.println(msg);
+                System.out.println("interrupted");
                 e.printStackTrace();
             }
         }
