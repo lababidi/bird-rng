@@ -64,7 +64,7 @@ public class Message {
 ////            System.out.println("File: " + jsonFileName);
 //            String json = Tiger.readFile(directory + jsonFileName);
 ////            System.out.println(json);
-//            Twitter.TwitterMessage message = tj.twitterify(json);
+//            Twitter.TwitterMessage message = tj.convert(json);
 //            if(null == message){
 //                System.err.println(json);
 //                System.out.println("File: " + jsonFileName);

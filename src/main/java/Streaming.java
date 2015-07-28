@@ -12,6 +12,7 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -79,20 +80,22 @@ public class Streaming implements Runnable{
     public void run(){
         hosebirdClient.connect();   // Attempts to establish a connection.
 
-        Conversion converter = new Conversion();
+        Converter converter = new Converter();
 
         while (!hosebirdClient.isDone() && !Thread.currentThread().isInterrupted()) {
             String msg;
             try {
                 if(msgQueue.size()>0) {
                     msg = msgQueue.take();
-                    Message message = converter.twitterify(msg);
-                    if (null != message) {
+                    try {
+                        Message message = converter.convert(msg);
                         messages.add(message);
 
                         System.out.println(message.user.location);
 //                    for (byte b : digest(message))
 //                        randomBytes.put(b);
+                    } catch (IOException e){
+                        System.err.println("No message converted [" + msg + "]" + e);
                     }
                 }
 

@@ -8,9 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,6 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class RandomGenerator {
 
+    private final int max;
     MessageDigest md;
     Queue<Message> messages;
     BlockingQueue<Byte> randomBytes = new LinkedBlockingQueue<>(10000);
@@ -28,7 +27,8 @@ public class RandomGenerator {
     Thread streamingThread;
 //    BlockingQueue<Message> messages;
 
-    public RandomGenerator() {
+    public RandomGenerator(int max) {
+        this.max = max;
 
         try {
             messages = new ConcurrentLinkedDeque<>();
@@ -73,7 +73,7 @@ public class RandomGenerator {
     public void interrupt(){streamingThread.interrupt();}
 
 
-    public void save(int max){
+    public void save(){
 
         ArrayList<Byte> bytes = new ArrayList<>();
 
@@ -82,7 +82,7 @@ public class RandomGenerator {
         while(!streamingThread.isInterrupted() && count<max) {
             if(messages.size()>0) {
                 message = messages.poll();
-                    for (byte b : digest(message))
+                    for (byte b : digest(message.text))
                         bytes.add(b);
                 count++;
                 System.out.println(bytes.size());
@@ -112,10 +112,10 @@ public class RandomGenerator {
     }
 
 
-    public byte[] digest(Message message){
+    public byte[] digest(String text){
         byte[] digest = new byte[0];
         try {
-            md.update(message.text.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+            md.update(text.getBytes("UTF-8")); // Change this to "UTF-16" if needed
             digest = md.digest();
 
         } catch (UnsupportedEncodingException e) {
@@ -125,9 +125,9 @@ public class RandomGenerator {
     }
 
     public static void main(String[] args){
-        RandomGenerator generator = new RandomGenerator();
+        RandomGenerator generator = new RandomGenerator(1000);
         generator.start();
-        generator.save(1000000);
+        generator.save();
         generator.interrupt();
     }
 }
