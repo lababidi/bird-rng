@@ -48,13 +48,13 @@ public class Streaming implements Runnable{
         }
 
 /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
-        Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
-        StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
+        Hosts hosts = new HttpHosts(Constants.STREAM_HOST);
+        StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 //        List<Long> followings = Lists.newArrayList(1234L, 566788L);
 //        List<String> terms = Lists.newArrayList("twitter", "api");
-//        hosebirdEndpoint.followings(followings);
-//        hosebirdEndpoint.trackTerms(terms);
+//        endpoint.followings(followings);
+//        endpoint.trackTerms(terms);
         ArrayList<Location> locations = new ArrayList<>();
         locations.add(new Location(
                 new Location.Coordinate(-75.4595947265625, 39.791654835253425),
@@ -62,15 +62,15 @@ public class Streaming implements Runnable{
         locations.add(new Location(
                 new Location.Coordinate(122.1240234375, 29.53522956294847),
                 new Location.Coordinate(152.8857421875, 55.37911044801047)));
-        hosebirdEndpoint.locations(locations);
+        endpoint.locations(locations);
 
         Authentication hosebirdAuth = new OAuth1(p.consumerKey, p.consumerSecret, p.authKey, p.authSecret);
 
         ClientBuilder builder = new ClientBuilder()
                 .name("Hosebird-Client-01")                              // optional: mainly for the logs
-                .hosts(hosebirdHosts)
+                .hosts(hosts)
                 .authentication(hosebirdAuth)
-                .endpoint(hosebirdEndpoint)
+                .endpoint(endpoint)
                 .processor(new StringDelimitedProcessor(msgQueue))
                 .eventMessageQueue(eventQueue);                          // optional: use this if you want to process client events
 
@@ -79,14 +79,14 @@ public class Streaming implements Runnable{
     public void run(){
         hosebirdClient.connect();   // Attempts to establish a connection.
 
-        Conversion conversion = new Conversion();
+        Conversion converter = new Conversion();
 
         while (!hosebirdClient.isDone() && !Thread.currentThread().isInterrupted()) {
             String msg;
             try {
                 if(msgQueue.size()>0) {
                     msg = msgQueue.take();
-                    Message message = conversion.twitterify(msg);
+                    Message message = converter.twitterify(msg);
                     if (null != message) {
                         messages.add(message);
 
